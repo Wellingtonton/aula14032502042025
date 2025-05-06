@@ -39,9 +39,24 @@ def contar_produtos_por_categoria(lista_de_produtos: List[Produto]) -> Dict[str,
             contagem[categoria] = 1
     return contagem
 
+def identificar_duplicatas(lista_de_produtos: List[Produto]) -> List[Produto]:
+    """
+    Identifica e retorna uma lista de produtos duplicados em uma lista de objetos Produto.
+    Considera um produto duplicado se o nome e a categoria forem iguais.
+    """
+    vistos = set()
+    duplicatas = []
+    for produto in lista_de_produtos:
+        chave = (produto.nome, produto.categoria)
+        if chave in vistos:
+            duplicatas.append(produto)
+        else:
+            vistos.add(chave)
+    return duplicatas
+
 def main():
-    """Função principal para demonstrar a contagem de produtos por categoria."""
-    produtos = gerar_produtos_aleatorios()
+    """Função principal para demonstrar a contagem de produtos por categoria e identificação de duplicatas."""
+    produtos = gerar_produtos_aleatorios(30) # Aumentando para ter mais chances de duplicatas
     print("Lista de Produtos Gerados:")
     for produto in produtos:
         print(produto)
@@ -50,6 +65,14 @@ def main():
     print("\nContagem de Produtos por Categoria:")
     for categoria, quantidade in contagem_por_categoria.items():
         print(f"Categoria: {categoria}: {quantidade} produtos")
+
+    duplicatas = identificar_duplicatas(produtos)
+    if duplicatas:
+        print("\nProdutos Duplicados Encontrados (nome e categoria iguais):")
+        for produto_duplicado in duplicatas:
+            print(produto_duplicado)
+    else:
+        print("\nNenhum produto duplicado encontrado (nome e categoria iguais).")
 
 if __name__ == "__main__":
     main()
